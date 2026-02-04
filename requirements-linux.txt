@@ -1,0 +1,12 @@
+# Requirements for Linux
+# Install with: pip install -r requirements-linux.txt
+
+# Core serial communication library
+pyserial>=3.5
+
+# Optional: For enhanced USB device detection
+pyusb>=1.2.0
+
+# Note: On Linux, ensure your user is in the 'dialout' or 'uucp' group
+# Run: sudo usermod -a -G dialout $USER
+# Then log out and log back in

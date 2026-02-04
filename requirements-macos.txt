@@ -1,0 +1,8 @@
+# Requirements for macOS
+# Install with: pip install -r requirements-macos.txt
+
+# Core serial communication library
+pyserial>=3.5
+
+# Note: On macOS, you may need to install drivers for USB-Serial adapters
+# Common drivers: FTDI, CH340, CP2102

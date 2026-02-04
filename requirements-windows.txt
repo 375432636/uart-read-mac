@@ -1,0 +1,8 @@
+# Requirements for Windows
+# Install with: pip install -r requirements-windows.txt
+
+# Core serial communication library
+pyserial>=3.5
+
+# Windows-specific serial port utilities (optional, for enhanced device detection)
+pywin32>=305
