@@ -10,7 +10,6 @@ import sys
 import time
 import serial
 from uart_util import UARTBase
-from urllib.parse import urlparse
 
 
 class MACReader(UARTBase):
@@ -28,9 +27,9 @@ class MACReader(UARTBase):
             timeout: Read timeout in seconds (default: 1)
         """
         super().__init__(baudrate, timeout)
-        # Pattern to match URLs in the log
-        self.url_pattern = re.compile(
-            r'https?://[^\s/$.?#].[^\s]*'
+        # Pattern to match domain names (e.g., lumin-vas-dev.deep-edge.cn)
+        self.domain_pattern = re.compile(
+            r'[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){2,}'
         )
 
     def parse_mac(self, line):
@@ -50,25 +49,20 @@ class MACReader(UARTBase):
 
     def parse_url_info(self, line):
         """
-        Parse URL from log line and return connection info.
+        Parse domain from log line and return connection info.
 
         Args:
             line: Log line to parse
 
         Returns:
-            Dict with protocol, host, env if URL found, None otherwise
+            Dict with host, env if domain found, None otherwise
         """
-        urls = self.url_pattern.findall(line)
-        for url in urls:
-            try:
-                parsed = urlparse(url)
-                protocol = parsed.scheme
-                host = parsed.netloc
-                # Determine environment: dev or main
-                env = 'dev' if 'dev' in host.lower() else 'main'
-                return {'protocol': protocol, 'host': host, 'env': env}
-            except Exception:
-                pass
+        domain_matches = self.domain_pattern.finditer(line)
+        for match in domain_matches:
+            host = match.group(0)
+            # Determine environment: dev or main
+            env = 'dev' if 'dev' in host.lower() else 'main'
+            return {'host': host, 'env': env}
         return None
 
     def read_logs(self):
@@ -117,8 +111,15 @@ class MACReader(UARTBase):
                                 # Parse and print URL info if present
                                 url_info = self.parse_url_info(line)
                                 if url_info:
-                                    print(f"    → protocol: {url_info['protocol']}, host: {url_info['host']}, env: {url_info['env']}")
+                                    print(f"    → host: {url_info['host']}, env: {url_info['env']}")
                                 print()
+
+                            # Also search for domain even without MAC
+                            else:
+                                url_info = self.parse_url_info(line)
+                                if url_info:
+                                    print(f"\n[*] Domain found: {url_info['host']}, env: {url_info['env']}")
+                                    print(f"    Log: {line}\n")
 
                     time.sleep(0.01)
 
