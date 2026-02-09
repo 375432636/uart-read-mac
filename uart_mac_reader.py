@@ -10,6 +10,7 @@ import sys
 import time
 import serial
 from uart_util import UARTBase
+from urllib.parse import urlparse
 
 
 class MACReader(UARTBase):
@@ -27,6 +28,10 @@ class MACReader(UARTBase):
             timeout: Read timeout in seconds (default: 1)
         """
         super().__init__(baudrate, timeout)
+        # Pattern to match URLs in the log
+        self.url_pattern = re.compile(
+            r'https?://[^\s/$.?#].[^\s]*'
+        )
 
     def parse_mac(self, line):
         """
@@ -41,6 +46,29 @@ class MACReader(UARTBase):
         match = re.search(self.MAC_PATTERN, line)
         if match:
             return match.group(1).upper()
+        return None
+
+    def parse_url_info(self, line):
+        """
+        Parse URL from log line and return connection info.
+
+        Args:
+            line: Log line to parse
+
+        Returns:
+            Dict with protocol, host, env if URL found, None otherwise
+        """
+        urls = self.url_pattern.findall(line)
+        for url in urls:
+            try:
+                parsed = urlparse(url)
+                protocol = parsed.scheme
+                host = parsed.netloc
+                # Determine environment: dev or main
+                env = 'dev' if 'dev' in host.lower() else 'main'
+                return {'protocol': protocol, 'host': host, 'env': env}
+            except Exception:
+                pass
         return None
 
     def read_logs(self):
@@ -84,7 +112,13 @@ class MACReader(UARTBase):
                             mac = self.parse_mac(line)
                             if mac:
                                 print(f"\n[!] MAC ADDRESS FOUND: {mac}")
-                                print(f"    Log: {line}\n")
+                                print(f"    Log: {line}")
+
+                                # Parse and print URL info if present
+                                url_info = self.parse_url_info(line)
+                                if url_info:
+                                    print(f"    → protocol: {url_info['protocol']}, host: {url_info['host']}, env: {url_info['env']}")
+                                print()
 
                     time.sleep(0.01)
 

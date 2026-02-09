@@ -34,22 +34,24 @@ class UARTLogPrinter(UARTBase):
 
         try:
             while True:
-                if self.serial_conn.in_waiting > 0:
-                    try:
-                        # Read a line
-                        line = self.serial_conn.readline().decode('utf-8', errors='ignore').strip()
-                        print(line)
-                    except UnicodeDecodeError:
-                        # Skip lines that can't be decoded
-                        pass
-                else:
-                    time.sleep(0.01)
+                try:
+                    if self.serial_conn.in_waiting > 0:
+                        try:
+                            # Read a line
+                            line = self.serial_conn.readline().decode('utf-8', errors='ignore').strip()
+                            print(line)
+                        except UnicodeDecodeError:
+                            # Skip lines that can't be decoded
+                            pass
+                    else:
+                        time.sleep(0.01)
+                except (serial.SerialException, OSError):
+                    # Device disconnected during operation
+                    print("\n[*] Device disconnected")
+                    return  # Return normally to let run() handle reconnection
 
         except KeyboardInterrupt:
             print("\n[*] Stopping log reader...")
-        except (serial.SerialException, OSError):
-            print("\n[*] Device disconnected")
-            raise  # Re-raise to let the run() method handle it
 
     def run(self, port=None, continuous=True):
         """
