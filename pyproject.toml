@@ -40,7 +40,7 @@ dev = [
 [project.scripts]
 uart-mac-reader = "uart_mac_reader:main"
 print-log = "print_log:main"
-list-uart = "list_uart_devices:main"
+list-uart = "list_uart_devices:list_uart_devices"
 
 [project.urls]
 Homepage = "https://github.com/375432636/uart-read-mac"
