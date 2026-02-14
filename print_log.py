@@ -10,7 +10,7 @@ import time
 import os
 import serial
 from datetime import datetime
-from uart_util import UARTBase
+from uart_mac_reader_pkg.uart_util import UARTBase
 
 
 # Static directory for log files

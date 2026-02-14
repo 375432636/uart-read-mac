@@ -9,7 +9,7 @@ import re
 import sys
 import time
 import serial
-from uart_util import UARTBase
+from uart_mac_reader_pkg.uart_util import UARTBase
 
 
 class MACReader(UARTBase):

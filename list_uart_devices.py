@@ -3,7 +3,7 @@
 List all currently connected UART/Serial devices.
 """
 
-from uart_util import list_uart_ports_detailed, format_port_info, get_platform
+from uart_mac_reader_pkg.uart_util import list_uart_ports_detailed, format_port_info, get_platform
 
 
 def list_uart_devices():

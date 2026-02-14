@@ -51,4 +51,6 @@ Issues = "https://github.com/375432636/uart-read-mac/issues"
 fallback_version = "1.0.0"
 
 [tool.setuptools]
-packages = []
+py-modules = ["uart_mac_reader", "print_log", "list_uart_devices"]
+
+packages = ["uart_mac_reader_pkg"]
