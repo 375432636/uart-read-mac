@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools_scm>=8.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uart-mac-reader"
+dynamic = ["version"]
+description = "Cross-platform USB UART MAC address reader and logging tools"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "deepedge-ai"}
+]
+keywords = ["uart", "serial", "mac", "logging", "usb", "hardware"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: System :: Hardware :: Hardware Drivers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "pyserial>=3.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[project.scripts]
+uart-mac-reader = "uart_mac_reader:main"
+print-log = "print_log:main"
+list-uart = "list_uart_devices:main"
+
+[project.urls]
+Homepage = "https://github.com/375432636/uart-read-mac"
+Repository = "https://github.com/375432636/uart-read-mac"
+Issues = "https://github.com/375432636/uart-read-mac/issues"
+
+[tool.setuptools_scm]
+fallback_version = "1.0.0"
+
+[tool.setuptools]
+packages = []
