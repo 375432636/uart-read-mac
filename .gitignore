@@ -81,6 +81,7 @@ dmypy.json
 # Logs
 *.log
 logs/
+static/
 
 # OS
 .DS_Store

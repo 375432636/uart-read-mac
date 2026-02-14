@@ -105,7 +105,7 @@ class MACReader(UARTBase):
                             # Extract and print MAC address with the log line
                             mac = self.parse_mac(line)
                             if mac:
-                                print(f"\n[!] MAC ADDRESS FOUND: {mac}")
+                                print(f"\nWiFi MAC Address: {mac}")
                                 print(f"    Log: {line}")
 
                                 # Parse and print URL info if present
